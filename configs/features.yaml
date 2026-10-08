@@ -1,0 +1,20 @@
+mode: expert
+
+expert_features:
+  use_selected_features: true
+  categorical_1way: true
+  categorical_2way: true
+  categorical_3way_v22: true
+  rounded_numeric_categories: true
+  numerical_pair_sums: true
+  high_order_v22_interactions: true
+  high_order_max_combinations: 1000
+
+target_encoding:
+  enabled: false
+  n_splits: 10
+  random_state: 42
+
+unknown_category_value: -1
+missing_category_token: __MISSING__
+random_seed: 42

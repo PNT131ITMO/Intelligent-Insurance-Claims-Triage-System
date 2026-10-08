@@ -19,3 +19,6 @@ mlflow>=3.16,<4
 
 joblib>=1.5,<2
 PyYAML>=6,<7
+pytest>=9,<10
+
+kaggle

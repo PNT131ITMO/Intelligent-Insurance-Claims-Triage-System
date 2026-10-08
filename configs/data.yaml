@@ -1,0 +1,9 @@
+raw:
+  train_path: data/raw/train.csv.zip
+  test_path: data/raw/test.csv.zip
+processed_dir: data/processed
+artifacts_dir: models/artifacts
+reports_dir: reports/figures
+target_column: target
+id_column: ID
+

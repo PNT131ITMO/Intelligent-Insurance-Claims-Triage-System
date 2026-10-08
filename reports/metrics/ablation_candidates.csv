@@ -1,0 +1,7 @@
+ablation_name,removed_feature_group,number_of_removed_features,reason_to_test
+expert_full,none,0,Reference feature set for all later comparisons.
+expert_without_cat11_v22,high_order_v22_interactions,66,"Median train cardinality is 107,832; median JS distance is 0.9453."
+expert_without_num_pair_sums,numerical_pair_sums,66,Numerical pair sums participate in 7 pairs with absolute correlation at least 0.98.
+expert_without_rounded_numeric,rounded_numeric_categories,12,"Median train cardinality is 85,872; median JS distance is 0.8256."
+expert_without_cat3_v22,categorical_3way_v22,66,Three-way interactions have median JS distance 0.5959 and high cardinality.
+expert_base_only,all engineered groups,288,Control set retaining only original numerical and encoded one-way categorical features.

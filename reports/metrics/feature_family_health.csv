@@ -1,0 +1,8 @@
+feature_group,semantic_type,feature_count,features_with_missing,median_cardinality,near_constant_count,high_shift_count,strongest_univariate_feature,association_metric,association_score
+original_numerical,numerical,12,8,,0,1,v50,absolute_point_biserial,0.24168273407867386
+numerical_pair_sums,numerical,66,60,,0,7,num2sum__v50__v129,absolute_point_biserial,0.2536675165195155
+categorical_1way,categorical,13,0,10.0,0,0,cat1__v22,mutual_information,0.10331184673649532
+categorical_2way,categorical,78,0,114.0,0,0,cat2__v22__v56,mutual_information,0.3493708557316649
+categorical_3way_v22,categorical,66,0,54210.0,0,0,cat3__v22__v52__v56,mutual_information,0.48756549076709
+high_order_v22_interactions,categorical,66,0,107831.5,0,18,cat11__v22__v24__v30__v52__v56__v66__v75__v79__v91__v112__v113,mutual_information,0.5450163357733808
+rounded_numeric_categories,categorical,12,0,85871.5,0,6,rnum__v34,mutual_information,0.54937250068106

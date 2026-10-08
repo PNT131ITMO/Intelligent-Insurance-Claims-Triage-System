@@ -1,0 +1,8 @@
+feature_group,feature_count,percentage_of_total
+original_numerical,12,3.8338658146964857
+numerical_pair_sums,66,21.08626198083067
+categorical_1way,13,4.15335463258786
+categorical_2way,78,24.920127795527158
+categorical_3way_v22,66,21.08626198083067
+high_order_v22_interactions,66,21.08626198083067
+rounded_numeric_categories,12,3.8338658146964857

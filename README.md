@@ -1,7 +1,8 @@
 # Intelligent Insurance Claims Triage System
 
-Xử lý dữ liệu cho bài toán binary classification trên bộ dữ liệu BNP Paribas Cardif Claims Management.
-## Dữ liệu
+Обработка данных для задачи бинарной классификации на наборе данных BNP Paribas Cardif Claims Management.
+
+## Данные
 
 ```text
 Train: 114,321 × 133
@@ -10,37 +11,37 @@ ID: ID
 Target: target
 ```
 
-`ID` được lưu riêng và không dùng làm feature. Từ 131 predictors ban đầu, expert preprocessing giữ lại 25 features gồm 12 numerical và 13 categorical.
+Столбец `ID` хранится отдельно и не используется как признак. Из 131 исходного предиктора экспертная предобработка сохраняет 25 признаков: 12 числовых и 13 категориальных.
 
-## Xử lý features
+## Обработка признаков
 
-- **Numerical:** giữ nguyên giá trị và NaN, không standardize hoặc impute.
-- **Categorical:** missing được biểu diễn bằng `__MISSING__`; category chưa gặp trong train được mã hóa thành `-1`.
-- **Categorical 1-way:** encode 13 categorical features thành `int32` codes.
-- **Categorical 2-way:** tạo mọi cặp, ví dụ `cat2__v22__v24`.
-- **Categorical 3-way:** tạo các tổ hợp ba chiều bắt buộc chứa `v22`.
-- **Categorical 11-way:** tạo các tổ hợp 11 chiều bắt buộc chứa `v22`, có giới hạn số combination để kiểm soát bộ nhớ.
-- **Numerical-to-categorical:** giảm hai chữ số thập phân cuối rồi encode, ví dụ `rnum__v10`.
-- **Numerical pair sums:** tạo tổng từng cặp, ví dụ `num2sum__v10__v12`.
+- **Числовые признаки:** исходные значения и NaN сохраняются без стандартизации и заполнения пропусков.
+- **Категориальные признаки:** пропуски обозначаются как `__MISSING__`, а категории, не встречавшиеся в обучающей выборке, кодируются значением `-1`.
+- **Одномерные категориальные признаки:** 13 категориальных признаков кодируются значениями типа `int32`.
+- **Двумерные категориальные взаимодействия:** создаются все пары, например `cat2__v22__v24`.
+- **Трёхмерные категориальные взаимодействия:** создаются комбинации из трёх признаков с обязательным участием `v22`.
+- **Одиннадцатимерные категориальные взаимодействия:** создаются комбинации из 11 признаков с обязательным участием `v22`; количество комбинаций ограничивается для контроля памяти.
+- **Преобразование числовых признаков в категориальные:** удаляются две последние цифры дробной части, после чего значения кодируются, например `rnum__v10`.
+- **Попарные суммы числовых признаков:** вычисляются суммы всех пар, например `num2sum__v10__v12`.
 
-Category mappings chỉ được fit trên train; test và dữ liệu mới chỉ được transform. Target encoding OOF đã được triển khai nhưng mặc định tắt.
+Словари категорий обучаются только на train; test и новые данные только преобразуются. OOF target encoding реализован, но по умолчанию отключён.
 
-## Feature matrix cuối cùng
+## Итоговая матрица признаков
 
-| Feature group | Số lượng |
+| Группа признаков | Количество |
 |---|---:|
-| Original numerical | 12 |
-| Numerical pair sums | 66 |
-| Categorical 1-way | 13 |
-| Categorical 2-way | 78 |
-| Categorical 3-way | 66 |
-| Categorical 11-way | 66 |
-| Numerical-to-categorical | 12 |
-| **Tổng** | **313** |
+| Исходные числовые | 12 |
+| Попарные суммы числовых | 66 |
+| Одномерные категориальные | 13 |
+| Двумерные категориальные | 78 |
+| Трёхмерные категориальные | 66 |
+| Одиннадцатимерные категориальные | 66 |
+| Числовые, преобразованные в категориальные | 12 |
+| **Всего** | **313** |
 
 ```text
 X_train_expert: 114,321 × 313
 X_test_expert:  114,393 × 313
 ```
 
-Dữ liệu model-ready được lưu trong `data/processed/`; preprocessing state được lưu tại `models/artifacts/bnp_feature_pipeline.joblib`.
+Готовые для моделирования данные сохраняются в `data/processed/`, а состояние предобработки — в `models/artifacts/bnp_feature_pipeline.joblib`.

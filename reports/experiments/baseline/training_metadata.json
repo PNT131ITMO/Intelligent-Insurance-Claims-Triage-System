@@ -1,0 +1,109 @@
+{
+  "created_at_utc": "2026-10-09T11:00:59.155076+00:00",
+  "model": "CatBoostClassifier",
+  "primary_metric": "log_loss",
+  "feature_set": "expert_base_only",
+  "feature_count": 25,
+  "categorical_feature_count": 13,
+  "feature_names": [
+    "v10",
+    "v12",
+    "v14",
+    "v21",
+    "v34",
+    "v38",
+    "v40",
+    "v50",
+    "v62",
+    "v72",
+    "v114",
+    "v129",
+    "cat1__v22",
+    "cat1__v24",
+    "cat1__v30",
+    "cat1__v31",
+    "cat1__v47",
+    "cat1__v52",
+    "cat1__v56",
+    "cat1__v66",
+    "cat1__v75",
+    "cat1__v79",
+    "cat1__v91",
+    "cat1__v112",
+    "cat1__v113"
+  ],
+  "categorical_feature_names": [
+    "cat1__v22",
+    "cat1__v24",
+    "cat1__v30",
+    "cat1__v31",
+    "cat1__v47",
+    "cat1__v52",
+    "cat1__v56",
+    "cat1__v66",
+    "cat1__v75",
+    "cat1__v79",
+    "cat1__v91",
+    "cat1__v112",
+    "cat1__v113"
+  ],
+  "categorical_feature_indices": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24
+  ],
+  "cross_validation": {
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42
+  },
+  "catboost": {
+    "parameters": {
+      "iterations": 1000,
+      "learning_rate": 0.05,
+      "depth": 6,
+      "l2_leaf_reg": 5.0,
+      "loss_function": "Logloss",
+      "eval_metric": "Logloss",
+      "task_type": "CPU",
+      "thread_count": -1,
+      "random_seed": 42,
+      "allow_writing_files": false
+    },
+    "early_stopping_rounds": 100,
+    "verbose": 100
+  },
+  "source_checksums": {
+    "X_train_expert.parquet": "10372c9cd01deb5eebe16ac782480fd5f399de525358df91dc7f3c1ad7e8ece6",
+    "y_train.parquet": "83bb77d50bf0cb00af2828cedf34169f0f4ad5cdbf5645552d525404306871e5",
+    "X_test_expert.parquet": "fca381ecc51455c334420762d53a3d848722290b3b82dbd912aafdafd716807d",
+    "train_ids.parquet": "45fbcb55b23631fda9625422fe1f10913404fb3a63b1a0f7c1bf1836d6b96862",
+    "test_ids.parquet": "b375be4ff3ca0fd4e419c9ce0f7e12806859568241bc7ca40bc48e0253d08c38",
+    "feature_manifest.json": "42fdc21b6fe08cbc32f58ffcf6fb9a5af4a1ddf861cc375132b636757642b6c0",
+    "preprocessing_metadata.json": "d20d396b1164a36b97f346cfeb0f155c0359a0ece358d05ec3d83bbb9c2ba0d4"
+  },
+  "library_versions": {
+    "catboost": "1.2.10",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "pyarrow": "25.0.1",
+    "scikit-learn": "1.9.1"
+  },
+  "fold_models": [
+    "F:\\Important\\Study\\ITMO\\Semester_7\\Intelligent-Insurance-Claims-Triage-System\\models\\artifacts\\catboost_baseline\\fold_1.cbm",
+    "F:\\Important\\Study\\ITMO\\Semester_7\\Intelligent-Insurance-Claims-Triage-System\\models\\artifacts\\catboost_baseline\\fold_2.cbm",
+    "F:\\Important\\Study\\ITMO\\Semester_7\\Intelligent-Insurance-Claims-Triage-System\\models\\artifacts\\catboost_baseline\\fold_3.cbm",
+    "F:\\Important\\Study\\ITMO\\Semester_7\\Intelligent-Insurance-Claims-Triage-System\\models\\artifacts\\catboost_baseline\\fold_4.cbm",
+    "F:\\Important\\Study\\ITMO\\Semester_7\\Intelligent-Insurance-Claims-Triage-System\\models\\artifacts\\catboost_baseline\\fold_5.cbm"
+  ]
+}

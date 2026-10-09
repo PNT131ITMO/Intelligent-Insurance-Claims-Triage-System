@@ -1,0 +1,15 @@
+cross_validation:
+  n_splits: 5
+  shuffle: true
+  random_state: 42
+
+sanity_baseline:
+  strategy: prior
+
+outputs:
+  experiment_dir: reports/experiments/baseline
+  model_dir: models/artifacts/catboost_baseline
+  save_fold_models: true
+  save_test_predictions: true
+  resume_completed_folds: true
+

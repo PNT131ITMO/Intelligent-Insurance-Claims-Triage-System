@@ -1,0 +1,16 @@
+catboost_baseline:
+  feature_set: expert_base_only
+  parameters:
+    iterations: 1000
+    learning_rate: 0.05
+    depth: 6
+    l2_leaf_reg: 5.0
+    loss_function: Logloss
+    eval_metric: Logloss
+    task_type: CPU
+    thread_count: -1
+    random_seed: 42
+    allow_writing_files: false
+  early_stopping_rounds: 100
+  verbose: 100
+

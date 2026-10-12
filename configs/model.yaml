@@ -1,7 +1,8 @@
 catboost_baseline:
-  feature_set: expert_base_only
+  feature_set: expert_without_cat11_v22
+
   parameters:
-    iterations: 1000
+    iterations: 3000
     learning_rate: 0.05
     depth: 6
     l2_leaf_reg: 5.0
@@ -11,6 +12,6 @@ catboost_baseline:
     thread_count: -1
     random_seed: 42
     allow_writing_files: false
-  early_stopping_rounds: 100
-  verbose: 100
 
+  early_stopping_rounds: 200
+  verbose: 100

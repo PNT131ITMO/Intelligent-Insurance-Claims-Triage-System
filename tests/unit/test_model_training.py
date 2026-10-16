@@ -52,6 +52,52 @@ def test_feature_set_preserves_order_and_recomputes_categorical_indices(modeling
     assert feature_set.categorical_indices == (1,)
 
 
+def test_combined_ablation_excludes_cat11_and_rounded_numeric_groups():
+    manifest = {
+        "final_feature_names": ["v10", "cat1__v22", "rnum__v10", "cat11__signature"],
+        "categorical_feature_names": ["cat1__v22", "rnum__v10", "cat11__signature"],
+        "categorical_feature_indices": [1, 2, 3],
+        "feature_origin": {
+            "v10": "original_numerical",
+            "cat1__v22": "categorical_1way",
+            "rnum__v10": "rounded_numeric_categories",
+            "cat11__signature": "high_order_v22_interactions",
+        },
+    }
+    feature_set = resolve_feature_set(manifest, "expert_without_cat11_and_rounded_numeric")
+    assert feature_set.feature_names == ("v10", "cat1__v22")
+    assert feature_set.categorical_names == ("cat1__v22",)
+    assert feature_set.categorical_indices == (1,)
+
+
+def test_sequential_ablation_also_excludes_numerical_pair_sums():
+    manifest = {
+        "final_feature_names": [
+            "v10",
+            "cat1__v22",
+            "rnum__v10",
+            "num2sum__v10__v12",
+            "cat11__signature",
+        ],
+        "categorical_feature_names": ["cat1__v22", "rnum__v10", "cat11__signature"],
+        "categorical_feature_indices": [1, 2, 4],
+        "feature_origin": {
+            "v10": "original_numerical",
+            "cat1__v22": "categorical_1way",
+            "rnum__v10": "rounded_numeric_categories",
+            "num2sum__v10__v12": "numerical_pair_sums",
+            "cat11__signature": "high_order_v22_interactions",
+        },
+    }
+    feature_set = resolve_feature_set(
+        manifest,
+        "expert_without_cat11_and_rounded_numeric_and_num_pair_sums",
+    )
+    assert feature_set.feature_names == ("v10", "cat1__v22")
+    assert feature_set.categorical_names == ("cat1__v22",)
+    assert feature_set.categorical_indices == (1,)
+
+
 def test_probability_metrics_reject_invalid_probabilities():
     with pytest.raises(ValueError, match="within"):
         binary_probability_metrics([0, 1], [0.2, 1.1])

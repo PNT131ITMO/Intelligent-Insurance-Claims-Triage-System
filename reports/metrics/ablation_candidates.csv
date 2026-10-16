@@ -1,7 +1,9 @@
-ablation_name,removed_feature_group,number_of_removed_features,reason_to_test
-expert_full,none,0,Reference feature set for all later comparisons.
-expert_without_cat11_v22,high_order_v22_interactions,66,"Median train cardinality is 107,832; median JS distance is 0.9453."
-expert_without_num_pair_sums,numerical_pair_sums,66,Numerical pair sums participate in 7 pairs with absolute correlation at least 0.98.
-expert_without_rounded_numeric,rounded_numeric_categories,12,"Median train cardinality is 85,872; median JS distance is 0.8256."
-expert_without_cat3_v22,categorical_3way_v22,66,Three-way interactions have median JS distance 0.5959 and high cardinality.
-expert_base_only,all engineered groups,288,Control set retaining only original numerical and encoded one-way categorical features.
+ablation_name,removed_feature_group,number_of_removed_features,remaining_feature_count,status,experiment_directory,oof_log_loss,roc_auc,average_precision,brier_score,reason_to_test,notes
+expert_full,none,0,313,not_run,,,,,,Reference feature set for all later comparisons.,
+expert_without_cat11_v22,high_order_v22_interactions,66,247,completed,reports/experiments/expert_without_cat11_v22,0.4384459092278412,0.7910969719615909,0.9207120094893336,0.1422462100319219,"Median train cardinality is 107,832; median JS distance is 0.9453.",Best completed OOF Log Loss so far.
+expert_without_cat11_and_rounded_numeric,high_order_v22_interactions; rounded_numeric_categories,78,235,completed,reports/experiments/expert_without_cat11_and_rounded_numeric,0.4384784399470436,0.7909945626782943,0.9205868207964152,0.1422409229776332,Backward ablation testing whether rounded numerical categories add value after removing cat11 interactions.,Practically tied with expert_without_cat11_v22.
+expert_without_cat11_and_rounded_numeric_and_num_pair_sums,high_order_v22_interactions; rounded_numeric_categories; numerical_pair_sums,144,169,not_run,,,,,,Sequential backward ablation; numerical pair sums participate in 7 pairs with absolute correlation at least 0.98.,Next experiment to run.
+expert_without_num_pair_sums,numerical_pair_sums,66,247,not_run,,,,,,Numerical pair sums participate in 7 pairs with absolute correlation at least 0.98.,Standalone variant retained for one-group-at-a-time comparison.
+expert_without_rounded_numeric,rounded_numeric_categories,12,301,not_run,,,,,,"Median train cardinality is 85,872; median JS distance is 0.8256.",Standalone variant has not been run; only the combined backward ablation is complete.
+expert_without_cat3_v22,categorical_3way_v22,66,247,not_run,,,,,,Three-way interactions have median JS distance 0.5959 and high cardinality.,
+expert_base_only,all engineered groups,288,25,completed,reports/experiments/expert_base_only_v2,0.4421672532947128,0.787118603597557,0.9187275331328654,0.1435182163451495,Control set retaining only original numerical and encoded one-way categorical features.,Uses the 3000-iteration v2 run; the earlier 1000-iteration result remains under reports/experiments/baseline.

@@ -1,5 +1,5 @@
 catboost_baseline:
-  feature_set: expert_without_cat11_v22
+  feature_set: expert_without_cat11_and_rounded_numeric_and_num_pair_sums
 
   parameters:
     iterations: 3000

@@ -30,6 +30,15 @@ class FeatureSpecification:
 
 EXCLUDED_GROUPS = {
     "expert_without_cat11_v22": {"high_order_v22_interactions"},
+    "expert_without_cat11_and_rounded_numeric": {
+        "high_order_v22_interactions",
+        "rounded_numeric_categories",
+    },
+    "expert_without_cat11_and_rounded_numeric_and_num_pair_sums": {
+        "high_order_v22_interactions",
+        "rounded_numeric_categories",
+        "numerical_pair_sums",
+    },
     "expert_without_num_pair_sums": {"numerical_pair_sums"},
     "expert_without_rounded_numeric": {"rounded_numeric_categories"},
     "expert_without_cat3_v22": {"categorical_3way_v22"},

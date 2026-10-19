@@ -1,0 +1,30 @@
+{
+  "feature_set": "expert_without_cat11_v22",
+  "oof_rows": 114321,
+  "folds": 5,
+  "observed_positive_rate": 0.7611987298921458,
+  "mean_predicted_probability": 0.760889031890746,
+  "metrics": {
+    "log_loss": 0.4384459092278412,
+    "roc_auc": 0.7910969719615909,
+    "average_precision": 0.9207120094893335,
+    "brier_score": 0.1422462100319219
+  },
+  "calibration": {
+    "method": "10 fixed-width bins",
+    "expected_calibration_error": 0.004757344732126146,
+    "occupied_bins": 10,
+    "largest_occupied_bin_gap": 0.03359902887985999
+  },
+  "artifacts": [
+    "reports/metrics/oof_calibration_bins.csv",
+    "reports/metrics/oof_threshold_scenarios.csv",
+    "reports/metrics/oof_highest_loss_cases.csv",
+    "reports/metrics/oof_technical_subgroups.csv",
+    "reports/figures/oof_reliability.png"
+  ],
+  "source_experiment": "reports/experiments/expert_without_cat11_v22",
+  "validation_scope": "CatBoost OOF; unsupervised feature mappings fitted once on full training features before CV",
+  "decision_threshold_selected": false,
+  "calibrator_fitted": false
+}

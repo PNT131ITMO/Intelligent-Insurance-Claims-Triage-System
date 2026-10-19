@@ -1,0 +1,3 @@
+model,feature_set,log_loss_mean,log_loss_std,roc_auc_mean,roc_auc_std,average_precision_mean,average_precision_std,brier_score_mean,brier_score_std
+dummy_prior,expert_without_cat11_and_rounded_numeric_and_num_pair_sums,0.5496942332972219,5.4145513692394595e-06,0.5,0.0,0.7611987298190599,4.67072419822943e-06,0.18177522355072712,2.4399579922982145e-06
+catboost,expert_without_cat11_and_rounded_numeric_and_num_pair_sums,0.438687924737724,0.0016517216706694936,0.7909319166055004,0.002090804087152836,0.9206591920264054,0.0007031002408257461,0.14233857883888318,0.000600600606392077

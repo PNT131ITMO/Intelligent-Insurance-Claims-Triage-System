@@ -1,0 +1,16 @@
+# Kept separate from configs/model.yaml, which records the latest CV experiment.
+feature_set: expert_without_cat11_v22
+source_experiment: reports/experiments/expert_without_cat11_v22
+processed_dir: data/processed
+preprocessing_artifact: models/artifacts/bnp_feature_pipeline.joblib
+output_dir: models/artifacts/final_expert_without_cat11_v22
+iteration_rule: median_cv_best_iteration_plus_one
+
+# Reuses the selected experiment's CatBoost parameters, replacing iterations
+# with the fixed value derived from its five validation folds.
+verbose: 100
+
+# Long CPU training can resume from the CatBoost snapshot after interruption.
+snapshot:
+  enabled: true
+  interval_seconds: 600

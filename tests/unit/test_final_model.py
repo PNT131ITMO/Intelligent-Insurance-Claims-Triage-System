@@ -1,5 +1,3 @@
-"""Fast contract tests for final-training selection and raw-input inference."""
-
 import json
 
 import joblib
@@ -80,3 +78,35 @@ def test_final_bundle_rejects_tampered_checksum(tiny_final_bundle):
     metadata_path.write_text(json.dumps(metadata))
     with pytest.raises(ValueError, match="checksum mismatch"):
         FinalCatBoostPredictor.load(bundle_dir)
+
+
+def test_serving_schema_and_json_null_input(tiny_final_bundle):
+    bundle_dir, _ = tiny_final_bundle
+    predictor = FinalCatBoostPredictor.load(bundle_dir)
+    schema = predictor.input_schema()
+    assert schema["id_field"] == "ID"
+    assert schema["target_field_is_not_input"] == "target"
+    assert schema["features"] == [
+        {"name": "v10", "type": "number", "nullable": True},
+        {"name": "v22", "type": "string", "nullable": True},
+    ]
+    assert schema["decision_threshold"] is None
+
+    record = pd.DataFrame([{"ID": "web-1", "v10": None, "v22": "UNSEEN", "ignored": 123}])
+    result = predictor.predict_raw(record)
+    assert result["ID"].tolist() == ["web-1"]
+    assert result["probability_target_1"].between(0, 1).all()
+
+
+def test_serving_rejects_invalid_raw_types(tiny_final_bundle):
+    bundle_dir, _ = tiny_final_bundle
+    predictor = FinalCatBoostPredictor.load(bundle_dir)
+    valid = pd.DataFrame([{"ID": 1, "v10": 0.5, "v22": "A"}])
+    for invalid in ("not-a-number", True, np.inf):
+        with pytest.raises(ValueError, match="Numerical feature"):
+            predictor.predict_raw(valid.assign(v10=invalid))
+    with pytest.raises(ValueError, match="Categorical feature"):
+        predictor.predict_raw(valid.assign(v22=3))
+    duplicated = pd.DataFrame([[1, 0.5, "A", "B"]], columns=["ID", "v10", "v22", "v22"])
+    with pytest.raises(ValueError, match="duplicated column"):
+        predictor.predict_raw(duplicated)

@@ -38,11 +38,18 @@ data/processed/*
 !data/processed/.gitkeep
 data/tmp/
 data/temp/
+data/uploads/
 
 *.parquet.tmp
 *.csv.tmp
+# Keep large trained binaries out of ordinary Git; retain the small serving
+# manifest so a checkout documents the exact bundle it needs.
 models/artifacts/*
 !models/artifacts/.gitkeep
+!models/artifacts/README.md
+!models/artifacts/final_*/
+models/artifacts/final_*/*
+!models/artifacts/final_*/metadata.json
 
 models/checkpoints/*
 !models/checkpoints/.gitkeep
@@ -74,6 +81,7 @@ optuna.db
 reports/figures/generated/
 reports/metrics/generated/
 reports/experiments/generated/
+reports/predictions/generated/
 
 logs/
 *.log

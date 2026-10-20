@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +12,9 @@ import numpy as np
 import pandas as pd
 
 from .artifacts import sha256_file
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_BUNDLE_DIR = PROJECT_ROOT / "models" / "artifacts" / "final_expert_without_cat11_v22"
 
 
 class FinalCatBoostPredictor:
@@ -60,11 +64,32 @@ class FinalCatBoostPredictor:
             raise ValueError("Categorical feature indices differ from the saved model")
         return cls(model, preprocessor, metadata)
 
+    def input_schema(self) -> dict[str, Any]:
+        numeric = set(self.preprocessor.numerical_features_)
+        categorical = set(self.preprocessor.categorical_features_)
+        selected = self.metadata["raw_selected_features"]
+        if numeric | categorical != set(selected) or numeric & categorical:
+            raise ValueError("Fitted raw feature types do not match bundle metadata")
+        return {
+            "model_id": self.metadata["model_sha256"][:12],
+            "feature_set": self.metadata["feature_set"],
+            "id_field": self.metadata["id_name"],
+            "target_field_is_not_input": self.metadata["target_name"],
+            "features": [
+                {"name": name, "type": "number" if name in numeric else "string", "nullable": True}
+                for name in selected
+            ],
+            "probability_field": "probability_target_1",
+            "decision_threshold": self.metadata["decision_threshold"],
+        }
+
     def predict_raw(self, raw_claims: pd.DataFrame) -> pd.DataFrame:
         id_name = self.metadata["id_name"]
         target_name = self.metadata["target_name"]
         if raw_claims.empty:
             raise ValueError("At least one raw claim is required")
+        if not raw_claims.columns.is_unique:
+            raise ValueError("Raw claims contain duplicated column names")
         if id_name not in raw_claims or raw_claims[id_name].isna().any() or not raw_claims[id_name].is_unique:
             raise ValueError("Raw claims must have nonmissing, unique IDs")
         if target_name in raw_claims:
@@ -73,8 +98,26 @@ class FinalCatBoostPredictor:
         if missing:
             raise ValueError(f"Raw claims are missing selected features: {missing}")
 
+        raw = raw_claims.loc[:, [id_name, *self.metadata["raw_selected_features"]]].copy()
+        for name in self.preprocessor.numerical_features_:
+            values = raw[name]
+            if pd.api.types.is_bool_dtype(values) or values.dropna().map(
+                lambda value: isinstance(value, (bool, np.bool_))
+            ).any():
+                raise ValueError(f"Numerical feature {name!r} must not contain booleans")
+            try:
+                converted = pd.to_numeric(values, errors="raise").astype("float64")
+            except (TypeError, ValueError) as error:
+                raise ValueError(f"Numerical feature {name!r} contains invalid values") from error
+            if np.isinf(converted.to_numpy()).any():
+                raise ValueError(f"Numerical feature {name!r} contains infinity")
+            raw[name] = converted
+        for name in self.preprocessor.categorical_features_:
+            if not raw[name].dropna().map(lambda value: isinstance(value, str)).all():
+                raise ValueError(f"Categorical feature {name!r} must contain strings or null")
+
         fitted_count = self.preprocessor.fit_count_
-        transformed = self.preprocessor.transform(raw_claims)
+        transformed = self.preprocessor.transform(raw)
         if self.preprocessor.fit_count_ != fitted_count:
             raise RuntimeError("Preprocessing state changed during inference")
         names = self.metadata["feature_names"]
@@ -90,12 +133,17 @@ class FinalCatBoostPredictor:
         probabilities = self.model.predict_proba(pool)[:, 1]
         if not np.isfinite(probabilities).all() or ((probabilities < 0) | (probabilities > 1)).any():
             raise RuntimeError("Model returned invalid positive-class probabilities")
-        return pd.DataFrame({id_name: raw_claims[id_name].to_numpy(), "probability_target_1": probabilities})
+        return pd.DataFrame({id_name: raw[id_name].to_numpy(), "probability_target_1": probabilities})
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--bundle", type=Path, default=Path("models/artifacts/final_expert_without_cat11_v22"))
+    parser.add_argument(
+        "--bundle",
+        type=Path,
+        default=Path(os.environ.get("BNP_MODEL_BUNDLE_DIR", str(DEFAULT_BUNDLE_DIR))),
+        help="Model bundle directory; defaults to BNP_MODEL_BUNDLE_DIR or the project artifact path",
+    )
     parser.add_argument("--input", type=Path, required=True, help="Raw CSV or single-member ZIP containing CSV")
     parser.add_argument("--output", type=Path, required=True, help="New .parquet or .csv output file")
     args = parser.parse_args()

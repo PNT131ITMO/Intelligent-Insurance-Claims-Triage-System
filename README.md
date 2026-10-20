@@ -45,3 +45,5 @@ X_test_expert:  114,393 × 313
 ```
 
 Готовые для моделирования данные сохраняются в `data/processed/`, а состояние предобработки — в `models/artifacts/bnp_feature_pipeline.joblib`.
+
+Контракт инференса и размещение итоговой модели описаны в [SERVING.md](SERVING.md).
